@@ -90,7 +90,7 @@ export const PRODUCTS: PartProduct[] = [
     oeNumber: '5Q0 698 151',
     inStock: true,
     stockCount: 18,
-    image: 'https://images.unsplash.com/photo-1600706432522-67756f743c3d?q=80&w=600&auto=format&fit=crop',
+    image: '/products/brake_pads.png',
     description: 'Jogo de 4 pastilhas de travão de disco para eixo dianteiro. Com contacto de aviso de desgaste integrado. Alta eficiência de travagem e reduzida emissão de poeiras.',
     specs: {
       'Largura': '160.2 mm',
@@ -121,7 +121,7 @@ export const PRODUCTS: PartProduct[] = [
     oeNumber: '1K0 615 301 AA',
     inStock: true,
     stockCount: 12,
-    image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?q=80&w=600&auto=format&fit=crop',
+    image: '/products/brake_disc.png',
     description: 'Discos de travão de alta performance com revestimento anti-corrosão UV. Arrefecimento otimizado para máxima durabilidade.',
     specs: {
       'Diâmetro Exterior': '312 mm',
@@ -151,7 +151,7 @@ export const PRODUCTS: PartProduct[] = [
     oeNumber: '03N 115 562 B',
     inStock: true,
     stockCount: 45,
-    image: 'https://images.unsplash.com/photo-1590674899484-d5640e854abe?q=80&w=600&auto=format&fit=crop',
+    image: '/products/oil_filter.png',
     description: 'Filtro de óleo cartucho com vedantes. Filtração superior e máxima proteção para o motor contra impurezas e partículas.',
     specs: {
       'Diâmetro Exterior': '65 mm',
@@ -181,7 +181,7 @@ export const PRODUCTS: PartProduct[] = [
     oeNumber: '5Q0 129 620 D',
     inStock: true,
     stockCount: 30,
-    image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=600&auto=format&fit=crop',
+    image: '/products/air_filter.png',
     description: 'Filtro de ar do motor de elevada capacidade de retenção de poeiras e humidade. Garante uma mistura ar-combustível perfeita.',
     specs: {
       'Comprimento': '292 mm',
@@ -209,7 +209,7 @@ export const PRODUCTS: PartProduct[] = [
     oeNumber: 'VW 504 00 / 507 00',
     inStock: true,
     stockCount: 50,
-    image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=600&auto=format&fit=crop',
+    image: '/products/engine_oil.png',
     description: 'Castrol EDGE 5W-30 LL com Fluid TITANIUM transforma-se para ser mais forte sob pressão e reduz o atrito. Aprovado para motores VW, Audi, BMW e Mercedes.',
     specs: {
       'Viscosidade': 'SAE 5W-30',
@@ -239,7 +239,7 @@ export const PRODUCTS: PartProduct[] = [
     oeNumber: '000 915 105 DG',
     inStock: true,
     stockCount: 8,
-    image: 'https://images.unsplash.com/photo-1558441719-67455705d671?q=80&w=600&auto=format&fit=crop',
+    image: '/products/car_battery.png',
     description: 'Bateria de arranque selada e isenta de manutenção. Tecnologia PowerFrame para arranque fiável mesmo a temperaturas extremas.',
     specs: {
       'Capacidade': '77 Ah',
