@@ -20,6 +20,7 @@ Uma plataforma completa de e-commerce para venda de peças automóveis, constru�
 - **Tailwind CSS v4**
 - **Supabase** (PostgreSQL)
 - **Lucide React** (ícones)
+- **Cloudflare Pages** (Hosting & Edge Deployment)
 
 ## ⚙️ Instalação
 
@@ -67,4 +68,29 @@ npm run dev
 
 ```bash
 npm run build
+```
+
+## ☁️ Deploy no Cloudflare Pages
+
+### Método 1: Integração Automática GitHub (Recomendado)
+
+1. Aceda ao [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
+2. Selecione o repositório `parceriasezi-hub/autoparts`.
+3. Configure os parâmetros do projeto:
+   - **Project Name**: `autoparts`
+   - **Production branch**: `main`
+   - **Framework preset**: `Next.js` (ou `None`)
+   - **Root directory**: `web`
+   - **Build command**: `npm run build`
+   - **Build output directory**: `.next` (ou `out` em caso de export estático)
+4. Em **Environment variables**, adicione:
+   - `NEXT_PUBLIC_SUPABASE_URL`: O URL do seu projeto Supabase
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: A sua chave anónima Supabase
+5. Clique em **Save and Deploy**.
+
+### Método 2: Deploy manual via Direct Upload / CLI
+
+```bash
+cd web
+npx wrangler pages deploy .next --project-name=autoparts
 ```
