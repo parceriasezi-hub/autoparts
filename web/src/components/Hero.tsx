@@ -79,28 +79,31 @@ export default function Hero() {
               <button 
                 type="button"
                 onClick={() => setActiveTab('matricula')}
-                className={`flex-1 py-3.5 text-center font-bold transition-colors ${activeTab === 'matricula' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                className={`flex-1 py-3 sm:py-3.5 px-1.5 sm:px-3 text-center font-bold transition-colors ${activeTab === 'matricula' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
               >
-                Por Matrícula
+                <span className="sm:hidden">Matrícula</span>
+                <span className="hidden sm:inline">Por Matrícula</span>
               </button>
               <button 
                 type="button"
                 onClick={() => setActiveTab('manual')}
-                className={`flex-1 py-3.5 text-center font-bold transition-colors ${activeTab === 'manual' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                className={`flex-1 py-3 sm:py-3.5 px-1.5 sm:px-3 text-center font-bold transition-colors ${activeTab === 'manual' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
               >
-                Por Veículo
+                <span className="sm:hidden">Veículo</span>
+                <span className="hidden sm:inline">Por Veículo</span>
               </button>
               <button 
                 type="button"
                 onClick={() => setActiveTab('vin')}
-                className={`flex-1 py-3.5 text-center font-bold transition-colors ${activeTab === 'vin' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                className={`flex-1 py-3 sm:py-3.5 px-1.5 sm:px-3 text-center font-bold transition-colors ${activeTab === 'vin' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
               >
-                Por N.º Chassis / VIN
+                <span className="sm:hidden">Chassis / VIN</span>
+                <span className="hidden sm:inline">Por N.º Chassis / VIN</span>
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               {activeTab === 'matricula' ? (
                 <form onSubmit={handlePlateSearch} className="space-y-4">
                   <div className="flex bg-gray-100 rounded-md border-2 border-gray-300 focus-within:border-primary overflow-hidden transition-colors h-14">
