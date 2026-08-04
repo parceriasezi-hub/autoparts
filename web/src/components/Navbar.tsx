@@ -49,15 +49,13 @@ export default function Navbar() {
     <>
       {/* Top Garage Active Bar */}
       {mounted && activeVehicle && (
-        <div className="bg-neutral-900 text-xs py-1.5 px-4 text-gray-300 border-b border-neutral-800">
-          <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-2">
+        <div className="bg-neutral-900 text-xs py-1.5 px-3 text-gray-300 border-b border-neutral-800">
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-2 text-[11px] whitespace-nowrap">
             <div className="flex items-center gap-1.5 min-w-0 truncate">
-              <Car size={14} className="text-primary shrink-0" />
-              <span className="text-gray-400 hidden sm:inline">Viatura:</span>
+              <Car size={13} className="text-primary shrink-0" />
               <strong className="text-white font-bold truncate">{activeVehicle.brandName} {activeVehicle.modelName}</strong>
-              <span className="text-gray-400 hidden md:inline truncate">({activeVehicle.engine})</span>
               {activeVehicle.plate && (
-                <span className="bg-primary/20 text-primary border border-primary/40 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0">
+                <span className="bg-primary/20 text-primary border border-primary/40 px-1.5 py-0.2 rounded text-[10px] font-mono font-bold shrink-0">
                   {activeVehicle.plate}
                 </span>
               )}
@@ -65,10 +63,9 @@ export default function Navbar() {
             
             <button 
               onClick={() => setIsVehicleModalOpen(true)}
-              className="text-primary hover:underline font-bold text-[11px] flex items-center gap-1 shrink-0 whitespace-nowrap"
+              className="text-primary hover:text-orange-400 font-bold text-[11px] flex items-center gap-1 shrink-0 bg-neutral-800 hover:bg-neutral-700 px-2 py-0.5 rounded transition-colors"
             >
-              <span className="hidden sm:inline">Trocar Viatura</span>
-              <span className="sm:hidden">Trocar</span>
+              <span>Trocar</span>
               <span className="text-[10px] text-gray-400">({savedVehicles.length})</span>
             </button>
           </div>
