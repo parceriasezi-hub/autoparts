@@ -13,7 +13,7 @@ export interface PartProduct {
   name: string;
   category: 'travoes' | 'filtros' | 'oleos' | 'eletricidade';
   categoryLabel: string;
-  brand: string; // e.g. Brembo, Bosch, Castrol, Mann-Filter
+  brand: string;
   price: number;
   originalPrice?: number;
   rating: number;
@@ -281,6 +281,61 @@ export const PRODUCTS: PartProduct[] = [
       { brandId: 'audi', modelId: 'a3', engine: '2.0 TDI (150 CV)' },
       { brandId: 'vw', modelId: 'golf', engine: '2.0 TDI (150 CV)' },
       { brandId: 'vw', modelId: 'passat', engine: '2.0 TDI (150 CV)' },
+    ]
+  },
+  {
+    id: 'valeo-escova-silencio',
+    name: 'Jogo de Escovas Limpa-Para-Brisas Valeo Silencio',
+    category: 'eletricidade',
+    categoryLabel: 'Eletricidade',
+    brand: 'Valeo',
+    price: 24.90,
+    originalPrice: 34.00,
+    rating: 4.8,
+    reviewsCount: 64,
+    sku: 'VF370 / 574470',
+    oeNumber: '5G1 998 002',
+    inStock: true,
+    stockCount: 25,
+    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600&auto=format&fit=crop',
+    description: 'Escovas planairas de alta eficiência com borracha de tecnologia VisioRubber para limpeza silenciosa e sem estrias.',
+    specs: {
+      'Comprimento 1': '650 mm',
+      'Comprimento 2': '450 mm',
+      'Lado de Montagem': 'Dianteiro (Par)'
+    },
+    compatibleVehicles: [
+      { brandId: 'vw', modelId: 'golf', engine: '2.0 TDI (150 CV)' },
+      { brandId: 'audi', modelId: 'a3', engine: '2.0 TDI (150 CV)' },
+      { brandId: 'vw', modelId: 'passat', engine: '2.0 TDI (150 CV)' }
+    ]
+  },
+  {
+    id: 'mahle-filtro-habitaculo',
+    name: 'Filtro de Habitáculo Mahle CareMetix (Carvão Ativo)',
+    category: 'filtros',
+    categoryLabel: 'Filtros',
+    brand: 'Mahle',
+    price: 18.50,
+    originalPrice: 26.00,
+    rating: 4.9,
+    reviewsCount: 110,
+    sku: 'LAO 888',
+    oeNumber: '5Q0 819 653',
+    inStock: true,
+    stockCount: 35,
+    image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=600&auto=format&fit=crop',
+    description: 'Filtro de ar do habitáculo de 5 camadas com tecnologia antialérgica e carvão ativo para neutralizar maus odores e poeiras finas.',
+    specs: {
+      'Comprimento': '254 mm',
+      'Largura': '224 mm',
+      'Altura': '30 mm',
+      'Tipo de Filtro': 'Com carvão ativo e ação antialérgica'
+    },
+    compatibleVehicles: [
+      { brandId: 'audi', modelId: 'a3', engine: '2.0 TDI (150 CV)' },
+      { brandId: 'vw', modelId: 'golf', engine: '2.0 TDI (150 CV)' },
+      { brandId: 'vw', modelId: 'tiguan', engine: '2.0 TDI (150 CV)' }
     ]
   }
 ];
