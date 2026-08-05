@@ -48,23 +48,30 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState('');
   const [couponSuccess, setCouponSuccess] = useState('');
 
+  const [fixedDiscountAmount, setFixedDiscountAmount] = useState(0);
+
   const shippingCost = shippingMethod === 'express' ? (totalPrice > 50 ? 0 : 4.90) : 0;
-  const discountAmount = (totalPrice * discountPercent) / 100;
+  const discountAmount = fixedDiscountAmount > 0 ? fixedDiscountAmount : (totalPrice * discountPercent) / 100;
   const finalTotal = Math.max(0, totalPrice - discountAmount + shippingCost);
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     setCouponError('');
     setCouponSuccess('');
 
-    if (coupon.trim().toUpperCase() === 'AUTOPARTS10') {
-      setDiscountPercent(10);
-      setCouponSuccess('Cupão de 10% de desconto aplicado com sucesso!');
-    } else if (coupon.trim().toUpperCase() === 'ENVIOGRATIS') {
-      setShippingMethod('express');
-      setCouponSuccess('Oferta de portes de envio aplicada!');
-    } else {
-      setCouponError('Cupão inválido ou expirado. Tente "AUTOPARTS10"');
+    if (!coupon.trim()) return;
+
+    try {
+      const { validateCoupon } = await import('@/services/partsService');
+      const res = await validateCoupon(coupon, totalPrice);
+      if (res.valid) {
+        setFixedDiscountAmount(res.discountAmount);
+        setCouponSuccess(res.message);
+      } else {
+        setCouponError(res.message);
+      }
+    } catch {
+      setCouponError('Não foi possível validar o cupão.');
     }
   };
 

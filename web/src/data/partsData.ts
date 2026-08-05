@@ -8,10 +8,20 @@ export interface VehicleBrand {
   }[];
 }
 
+export interface VehicleBrand {
+  id: string;
+  name: string;
+  models: {
+    id: string;
+    name: string;
+    engines: string[];
+  }[];
+}
+
 export interface PartProduct {
   id: string;
   name: string;
-  category: 'travoes' | 'filtros' | 'oleos' | 'eletricidade';
+  category: string;
   categoryLabel: string;
   brand: string;
   price: number;
@@ -30,6 +40,88 @@ export interface PartProduct {
     modelId: string;
     engine: string;
   }[];
+}
+
+// Category Management
+export interface CategoryItem {
+  id: string;
+  slug: string;
+  name: string;
+  iconName: string;
+  description: string;
+  productCount?: number;
+}
+
+// Coupon / Promotion Management
+export interface CouponItem {
+  id: string;
+  code: string;
+  discountType: 'percent' | 'fixed';
+  discountValue: number;
+  minSubtotal: number;
+  active: boolean;
+  expiresAt: string;
+  usageCount: number;
+}
+
+// Customer Management
+export interface CustomerItem {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  nif?: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  totalSpent: number;
+  ordersCount: number;
+  registeredAt: string;
+  status: 'active' | 'suspended';
+}
+
+// RBAC Permissions Matrix
+export type PermissionKey =
+  | 'products:read'
+  | 'products:create'
+  | 'products:edit'
+  | 'products:delete'
+  | 'orders:read'
+  | 'orders:update_status'
+  | 'categories:manage'
+  | 'coupons:manage'
+  | 'customers:read'
+  | 'customers:manage'
+  | 'roles:manage'
+  | 'settings:manage';
+
+export interface RoleDefinition {
+  id: string;
+  name: string;
+  description: string;
+  isSystem?: boolean;
+  permissions: PermissionKey[];
+}
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  roleId: string;
+  pinCode: string;
+  active: boolean;
+  lastLogin?: string;
+}
+
+export interface StoreSettings {
+  freeShippingMin: number;
+  standardShippingFee: number;
+  announcementBanner: string;
+  showBanner: boolean;
+  supportEmail: string;
+  supportPhone: string;
+  storeNif: string;
+  storeAddress: string;
 }
 
 export const VEHICLE_BRANDS: VehicleBrand[] = [
@@ -339,3 +431,88 @@ export const PRODUCTS: PartProduct[] = [
     ]
   }
 ];
+
+export const INITIAL_CATEGORIES: CategoryItem[] = [
+  { id: 'cat-1', slug: 'travoes', name: 'Travões', iconName: 'Disc', description: 'Pastilhas, discos, pinças e tubos de travão', productCount: 4 },
+  { id: 'cat-2', slug: 'filtros', name: 'Filtros', iconName: 'Filter', description: 'Filtros de óleo, ar, combustível e habitáculo', productCount: 3 },
+  { id: 'cat-3', slug: 'oleos', name: 'Óleos e Fluidos', iconName: 'Droplet', description: 'Óleos de motor, valvolinas e líquido de refrigeração', productCount: 1 },
+  { id: 'cat-4', slug: 'eletricidade', name: 'Eletricidade', iconName: 'Zap', description: 'Baterias, velas, alternadores e iluminação', productCount: 1 }
+];
+
+export const INITIAL_COUPONS: CouponItem[] = [
+  { id: 'coup-1', code: 'AUTO10', discountType: 'percent', discountValue: 10, minSubtotal: 30, active: true, expiresAt: '2026-12-31', usageCount: 42 },
+  { id: 'coup-2', code: 'BOM2026', discountType: 'fixed', discountValue: 15, minSubtotal: 80, active: true, expiresAt: '2026-09-30', usageCount: 18 }
+];
+
+export const INITIAL_CUSTOMERS: CustomerItem[] = [
+  { id: 'cust-1', name: 'Manuel Silva', email: 'manuel.silva@gmail.com', phone: '912 345 678', nif: '234567890', address: 'Rua de Camões 142, 2º Dto', city: 'Porto', postalCode: '4000-140', totalSpent: 248.90, ordersCount: 2, registeredAt: '2026-01-15', status: 'active' },
+  { id: 'cust-2', name: 'Ana Sofia Martins', email: 'ana.martins@outlook.pt', phone: '965 890 123', nif: '198765432', address: 'Av. da Liberdade 85', city: 'Lisboa', postalCode: '1250-140', totalSpent: 119.00, ordersCount: 1, registeredAt: '2026-02-10', status: 'active' },
+  { id: 'cust-3', name: 'Carlos Ribeiro', email: 'carlos.ribeiro@sapo.pt', phone: '931 112 233', nif: '221144556', address: 'Rua de Santo António 44', city: 'Braga', postalCode: '4700-010', totalSpent: 450.50, ordersCount: 4, registeredAt: '2025-11-20', status: 'active' }
+];
+
+export const INITIAL_ROLES: RoleDefinition[] = [
+  {
+    id: 'super_admin',
+    name: '👑 Super Admin',
+    description: 'Acesso total sem restrições a todas as funcionalidades e configurações da loja.',
+    isSystem: true,
+    permissions: [
+      'products:read', 'products:create', 'products:edit', 'products:delete',
+      'orders:read', 'orders:update_status',
+      'categories:manage', 'coupons:manage',
+      'customers:read', 'customers:manage',
+      'roles:manage', 'settings:manage'
+    ]
+  },
+  {
+    id: 'store_manager',
+    name: '🏬 Gerente de Loja',
+    description: 'Gestão de catálogo, encomendas, categorias, promoções e clientes.',
+    isSystem: false,
+    permissions: [
+      'products:read', 'products:create', 'products:edit', 'products:delete',
+      'orders:read', 'orders:update_status',
+      'categories:manage', 'coupons:manage',
+      'customers:read', 'customers:manage'
+    ]
+  },
+  {
+    id: 'stock_manager',
+    name: '📦 Gestor de Stock',
+    description: 'Adicionar e editar peças, atualizar preços e gerir quantidades em stock.',
+    isSystem: false,
+    permissions: [
+      'products:read', 'products:create', 'products:edit',
+      'categories:manage'
+    ]
+  },
+  {
+    id: 'support',
+    name: '🎧 Apoio ao Cliente',
+    description: 'Consultar encomendas, atualizar estados de envio e ver ficheiro de clientes.',
+    isSystem: false,
+    permissions: [
+      'products:read',
+      'orders:read', 'orders:update_status',
+      'customers:read'
+    ]
+  }
+];
+
+export const INITIAL_ADMIN_USERS: AdminUser[] = [
+  { id: 'admin-1', name: 'Administrador Principal', email: 'admin@autoparts.pt', roleId: 'super_admin', pinCode: 'admin123', active: true, lastLogin: 'Hoje' },
+  { id: 'admin-2', name: 'João Ferreira (Stock)', email: 'joao.stock@autoparts.pt', roleId: 'stock_manager', pinCode: 'stock123', active: true, lastLogin: 'Ontem' },
+  { id: 'admin-3', name: 'Margarida Santos (Apoio)', email: 'margarida.apoio@autoparts.pt', roleId: 'support', pinCode: 'support123', active: true, lastLogin: 'Há 2 dias' }
+];
+
+export const INITIAL_STORE_SETTINGS: StoreSettings = {
+  freeShippingMin: 50,
+  standardShippingFee: 4.90,
+  announcementBanner: '🚚 Portes Grátis em compras superiores a 50€! Entrega expresso em 24h/48h.',
+  showBanner: true,
+  supportEmail: 'apoio@autoparts.pt',
+  supportPhone: '+351 210 998 877',
+  storeNif: 'PT509123456',
+  storeAddress: 'Zona Industrial da Maia, Lote 42, 4470-000 Maia'
+};
+

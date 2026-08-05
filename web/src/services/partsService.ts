@@ -1,5 +1,21 @@
 import { supabase } from '@/lib/supabaseClient';
-import { PRODUCTS, PartProduct } from '@/data/partsData';
+import {
+  PRODUCTS,
+  PartProduct,
+  CategoryItem,
+  CouponItem,
+  CustomerItem,
+  RoleDefinition,
+  AdminUser,
+  StoreSettings,
+  PermissionKey,
+  INITIAL_CATEGORIES,
+  INITIAL_COUPONS,
+  INITIAL_CUSTOMERS,
+  INITIAL_ROLES,
+  INITIAL_ADMIN_USERS,
+  INITIAL_STORE_SETTINGS
+} from '@/data/partsData';
 
 export interface DBOrderData {
   id?: string;
@@ -376,3 +392,252 @@ export async function saveOrderToSupabase(order: DBOrderData) {
 
   return { success: true, orderId };
 }
+
+/* ==========================================================================
+   Category Services
+   ========================================================================== */
+export async function fetchCategories(): Promise<CategoryItem[]> {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('autoparts_admin_categories');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        // pass
+      }
+    }
+  }
+  return INITIAL_CATEGORIES;
+}
+
+export async function saveCategory(category: CategoryItem): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchCategories();
+    const idx = current.findIndex((c) => c.id === category.id || c.slug === category.slug);
+    if (idx >= 0) {
+      current[idx] = category;
+    } else {
+      current.push(category);
+    }
+    localStorage.setItem('autoparts_admin_categories', JSON.stringify(current));
+  }
+  return { success: true };
+}
+
+export async function deleteCategory(id: string): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchCategories();
+    const filtered = current.filter((c) => c.id !== id);
+    localStorage.setItem('autoparts_admin_categories', JSON.stringify(filtered));
+  }
+  return { success: true };
+}
+
+/* ==========================================================================
+   Coupon & Promotion Services
+   ========================================================================== */
+export async function fetchCoupons(): Promise<CouponItem[]> {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('autoparts_admin_coupons');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        // pass
+      }
+    }
+  }
+  return INITIAL_COUPONS;
+}
+
+export async function saveCoupon(coupon: CouponItem): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchCoupons();
+    const idx = current.findIndex((c) => c.id === coupon.id || c.code.toUpperCase() === coupon.code.toUpperCase());
+    if (idx >= 0) {
+      current[idx] = coupon;
+    } else {
+      current.unshift(coupon);
+    }
+    localStorage.setItem('autoparts_admin_coupons', JSON.stringify(current));
+  }
+  return { success: true };
+}
+
+export async function deleteCoupon(id: string): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchCoupons();
+    const filtered = current.filter((c) => c.id !== id);
+    localStorage.setItem('autoparts_admin_coupons', JSON.stringify(filtered));
+  }
+  return { success: true };
+}
+
+export async function validateCoupon(code: string, subtotal: number): Promise<{ valid: boolean; discountAmount: number; message: string }> {
+  const coupons = await fetchCoupons();
+  const found = coupons.find((c) => c.code.trim().toUpperCase() === code.trim().toUpperCase() && c.active);
+
+  if (!found) {
+    return { valid: false, discountAmount: 0, message: 'Cupão inválido ou expirado.' };
+  }
+
+  if (subtotal < found.minSubtotal) {
+    return { valid: false, discountAmount: 0, message: `Este cupão exige um subtotal mínimo de ${found.minSubtotal.toFixed(2)} €.` };
+  }
+
+  let discount = 0;
+  if (found.discountType === 'percent') {
+    discount = (subtotal * found.discountValue) / 100;
+  } else {
+    discount = found.discountValue;
+  }
+
+  discount = Math.min(discount, subtotal);
+
+  return {
+    valid: true,
+    discountAmount: Number(discount.toFixed(2)),
+    message: `Cupão "${found.code}" aplicado com sucesso!`
+  };
+}
+
+/* ==========================================================================
+   Customer Services
+   ========================================================================== */
+export async function fetchCustomers(): Promise<CustomerItem[]> {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('autoparts_admin_customers');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        // pass
+      }
+    }
+  }
+  return INITIAL_CUSTOMERS;
+}
+
+export async function saveCustomer(customer: CustomerItem): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchCustomers();
+    const idx = current.findIndex((c) => c.id === customer.id || c.email === customer.email);
+    if (idx >= 0) {
+      current[idx] = customer;
+    } else {
+      current.unshift(customer);
+    }
+    localStorage.setItem('autoparts_admin_customers', JSON.stringify(current));
+  }
+  return { success: true };
+}
+
+export async function toggleCustomerStatus(id: string): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchCustomers();
+    const updated = current.map((c) => (c.id === id ? { ...c, status: c.status === 'active' ? ('suspended' as const) : ('active' as const) } : c));
+    localStorage.setItem('autoparts_admin_customers', JSON.stringify(updated));
+  }
+  return { success: true };
+}
+
+/* ==========================================================================
+   RBAC Roles & Admin Users Services
+   ========================================================================== */
+export async function fetchRoles(): Promise<RoleDefinition[]> {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('autoparts_admin_roles');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        // pass
+      }
+    }
+  }
+  return INITIAL_ROLES;
+}
+
+export async function saveRole(role: RoleDefinition): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchRoles();
+    const idx = current.findIndex((r) => r.id === role.id);
+    if (idx >= 0) {
+      current[idx] = role;
+    } else {
+      current.push(role);
+    }
+    localStorage.setItem('autoparts_admin_roles', JSON.stringify(current));
+  }
+  return { success: true };
+}
+
+export async function fetchAdminUsers(): Promise<AdminUser[]> {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('autoparts_admin_users');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        // pass
+      }
+    }
+  }
+  return INITIAL_ADMIN_USERS;
+}
+
+export async function saveAdminUser(user: AdminUser): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchAdminUsers();
+    const idx = current.findIndex((u) => u.id === user.id || u.email === user.email);
+    if (idx >= 0) {
+      current[idx] = user;
+    } else {
+      current.push(user);
+    }
+    localStorage.setItem('autoparts_admin_users', JSON.stringify(current));
+  }
+  return { success: true };
+}
+
+export async function deleteAdminUser(id: string): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    const current = await fetchAdminUsers();
+    const filtered = current.filter((u) => u.id !== id);
+    localStorage.setItem('autoparts_admin_users', JSON.stringify(filtered));
+  }
+  return { success: true };
+}
+
+export function hasPermission(role: RoleDefinition | null, permission: PermissionKey): boolean {
+  if (!role) return false;
+  if (role.id === 'super_admin' || role.permissions.includes('products:read') && role.permissions.length >= 10) {
+    return true;
+  }
+  return role.permissions.includes(permission);
+}
+
+/* ==========================================================================
+   Store Settings Services
+   ========================================================================== */
+export async function fetchStoreSettings(): Promise<StoreSettings> {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('autoparts_admin_settings');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        // pass
+      }
+    }
+  }
+  return INITIAL_STORE_SETTINGS;
+}
+
+export async function saveStoreSettings(settings: StoreSettings): Promise<{ success: boolean }> {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('autoparts_admin_settings', JSON.stringify(settings));
+  }
+  return { success: true };
+}
+
