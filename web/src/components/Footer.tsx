@@ -30,7 +30,7 @@ export default function Footer() {
             <li><Link href="#" className="hover:text-primary transition-colors">Contactos</Link></li>
             <li><Link href="#" className="hover:text-primary transition-colors">Devoluções</Link></li>
             <li><Link href="#" className="hover:text-primary transition-colors">Perguntas Frequentes</Link></li>
-            <li><Link href="#" className="hover:text-primary transition-colors">Seguir Encomenda</Link></li>
+            <li><Link href="/admin" className="text-orange-400 hover:text-orange-300 font-bold transition-colors">⚙️ Área de Administração</Link></li>
           </ul>
         </div>
 

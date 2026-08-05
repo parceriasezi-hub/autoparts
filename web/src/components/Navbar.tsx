@@ -108,6 +108,10 @@ export default function Navbar() {
                 Ver Catálogo
               </Link>
 
+              <Link href="/admin" className="hidden lg:flex items-center text-xs font-bold text-orange-400 hover:text-orange-300 bg-neutral-800 border border-neutral-700 px-2.5 py-1 rounded-md transition-colors">
+                ⚙️ Admin
+              </Link>
+
               {mounted && user?.isAuthenticated ? (
                 <div className="hidden md:flex items-center gap-3">
                   <Link 
@@ -190,6 +194,13 @@ export default function Navbar() {
               className="block text-white font-medium py-2 hover:text-primary"
             >
               A Minha Garagem / Conta
+            </Link>
+            <Link 
+              href="/admin" 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block text-orange-400 font-bold py-2 hover:text-orange-300"
+            >
+              ⚙️ Painel de Administração
             </Link>
           </div>
         )}
